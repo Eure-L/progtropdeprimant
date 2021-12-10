@@ -6,8 +6,8 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
 {
     if(!scene)
         return;
+    printf("rendering\n");
     clock_t t = clock();
-
     const Camera *camera = scene->camera();
     const Integrator* integrator = scene->integrator();
     integrator->preprocess(scene);
@@ -29,14 +29,10 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
     unsigned int height = camera->vpHeight();
     Vector3f vx = camX / (width/2);
     Vector3f vy = camY / (width/2); 
+    float zoom = 2;
 
     for(int pixx = 0; pixx < width; pixx++){
         for(int pixy = 0; pixy < height; pixy++){
-
-            // direction du rayon
-            // Vector3f dx = (2*(pixy+0.5)*camX) / (width);
-            // Vector3f dy = (2*(pixx+0.5)*camY) / (height);
-            float zoom = 2.0;
 
             Vector3f dx = ((zoom*(pixx+0.5)-(width))*camX) / (width);
             Vector3f dy = ((zoom*(pixy+0.5)-(height))*camY) / (height);
@@ -47,8 +43,7 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
         }
     }
 
-    // Bitmap* image = result->toBitmap();
-    // image->save(outputName);
+
     t = clock() - t;
     std::cout << "Raytracing time : " << float(t)/CLOCKS_PER_SEC << "s"<<std::endl;
 
