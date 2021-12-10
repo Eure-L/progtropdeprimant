@@ -36,13 +36,16 @@ void Scene::intersect(const Ray& ray, Hit& hit) const
                 hitCheck = 1;
                 closestHit->setT(hit.t());
                 closestHit->setShape(shape);
-                
             }
             else if(hit.t() < closestHit->t()){
                 closestHit->setT(hit.t());
                 closestHit->setShape(shape);
             }
         }
+    }
+    if(hitCheck != -1){
+        hit.setT(closestHit->t());
+        hit.setShape(closestHit->shape());
     }
     delete(closestHit);
 }

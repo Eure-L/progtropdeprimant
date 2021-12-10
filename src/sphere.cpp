@@ -19,6 +19,7 @@ Sphere::~Sphere()
 bool Sphere::intersect(const Ray& ray, Hit& hit) const
 {
     /// TODO: compute ray-sphere intersection
+
     Point3f     o = ray.origin;
     Point3f     c = m_center;
     float       r = m_radius;
@@ -59,8 +60,7 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
         float point2 = (-B +sqrt(discriminant)) / (2*A);
 
         //on verifie que un des points est plus près que l'intersection déjà existante
-        if(point1< hit.t() || point2 < hit.t()){
-            
+        if(point1< hit.t() || point2 < hit.t()){            
             //on garde le point le plus proche
             if(point1<point2)
                 hit.setT(point1);
@@ -68,8 +68,10 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
                 hit.setT(point2);
             hit.setNormal(Point3f(ray.at(hit.t())-m_center).normalized());
             hit.setShape(this);
+
             return true;
         }
+
         return false;
     }
 

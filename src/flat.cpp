@@ -14,8 +14,12 @@ public:
         scene->intersect(ray,*hit);
 
         if(hit->shape() != NULL){
-            return hit->shape()->material()->ambientColor();
-        }   
+            
+            Color3f color = hit->shape()->material()->ambientColor();
+            delete(hit);
+            return color;
+
+        }
         delete(hit);
         return Color3f(0.f);
     }

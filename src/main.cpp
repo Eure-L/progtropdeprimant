@@ -6,7 +6,6 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
 {
     if(!scene)
         return;
-
     clock_t t = clock();
 
     const Camera *camera = scene->camera();
@@ -23,7 +22,7 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
     ///  2. generate a primary ray
     ///  3. call the integartor to compute the color along this ray
     ///  4. write this color in the result image
-    
+
     Point3f origin = camera->position();
     Point3f I;
     unsigned int width = camera->vpWidth();
@@ -31,30 +30,25 @@ void render(Scene* scene, ImageBlock* result, std::string outputName, bool* done
     Vector3f vx = camX / (width/2);
     Vector3f vy = camY / (width/2); 
 
-    Point3f target = origin + camF - camX - camY + vx/2 +vy/2;
-    // D = I - camX - camY
     for(int pixx = 0; pixx < width; pixx++){
         for(int pixy = 0; pixy < height; pixy++){
 
             // direction du rayon
-            Vector3f dx = (2*(pixy+0.5)*camX) / (width-1);
-            Vector3f dy = (2*(pixx+0.5)*camY) / (height-1);
+            // Vector3f dx = (2*(pixy+0.5)*camX) / (width);
+            // Vector3f dy = (2*(pixx+0.5)*camY) / (height);
+            float zoom = 2.0;
+
+            Vector3f dx = ((zoom*(pixx+0.5)-(width))*camX) / (width);
+            Vector3f dy = ((zoom*(pixy+0.5)-(height))*camY) / (height);
             Vector3f d = dx + dy + camF;
             d.normalize();
-
             Ray ray(origin,d);
-            Color3f col = integrator->Li(scene,ray);
-
-            result->put(Vector2f(pixx,pixy),col);
-            target += vx;
+            result->put(Vector2f(pixx,pixy),integrator->Li(scene,ray));
         }
-        target -= vx*width;
-        target += vy;
     }
 
-    Bitmap image = *result->toBitmap();
-    image.save(outputName);
-    
+    // Bitmap* image = result->toBitmap();
+    // image->save(outputName);
     t = clock() - t;
     std::cout << "Raytracing time : " << float(t)/CLOCKS_PER_SEC << "s"<<std::endl;
 
