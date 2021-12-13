@@ -52,25 +52,24 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
         }
         return false;
     }
-
     // Deux Solutions
     else{
         float point1 = (-B -sqrt(discriminant)) / (2*A);
         float point2 = (-B +sqrt(discriminant)) / (2*A);
 
         //on verifie que un des points est plus près que l'intersection déjà existante
-        if(point1< hit.t() || point2 < hit.t()){            
-            //on garde le point le plus proche
-            if(point1<point2)
-                hit.setT(point1);
-            else
-                hit.setT(point2);
-            hit.setNormal(Point3f(ray.at(hit.t())-m_center).normalized());
+        if(point1>0){
+            hit.setT(point1);
+            hit.setNormal((ray.at(point1)-m_center).normalized());
             hit.setShape(this);
-
             return true;
         }
-
+        else if(point2>0){
+            hit.setT(point2);
+            hit.setNormal((ray.at(point2)-m_center).normalized());
+            hit.setShape(this);
+            return true;
+        }
         return false;
     }
 

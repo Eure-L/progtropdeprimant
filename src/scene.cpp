@@ -27,26 +27,28 @@ void Scene::intersect(const Ray& ray, Hit& hit) const
     /// TODO: iterate on the object list and test for intersection
     ///       => if any, keep the closest one
 
+    hit.setT(std::numeric_limits<float>::max());
+    
     std::vector<int> intersected;
-    int hitCheck = -1;
+    //int hitCheck = -1;
     Hit* closestHit = new Hit();
     for(auto shape:m_shapeList){
         if (shape->intersect(ray,hit)){
-            if(hitCheck == -1){
+            /* if(hitCheck == -1){
                 hitCheck = 1;
                 closestHit->setT(hit.t());
                 closestHit->setShape(shape);
-            }
-            else if(hit.t() < closestHit->t()){
+            } */
+            /*else*/ if(hit.t() < closestHit->t()){
                 closestHit->setT(hit.t());
                 closestHit->setShape(shape);
             }
         }
     }
-    if(hitCheck != -1){
-        hit.setT(closestHit->t());
-        hit.setShape(closestHit->shape());
-    }
+    // if(hitCheck != -1){
+    //     hit.setT(closestHit->t());
+    //     hit.setShape(closestHit->shape());
+    // }
     delete(closestHit);
 }
 

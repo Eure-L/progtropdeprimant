@@ -1,4 +1,5 @@
 #include "material.h"
+#include <math.h>
 
 Phong::Phong(const PropertyList &propList)
     : Diffuse(propList.getColor("diffuse",Color3f(0.2)))
@@ -19,10 +20,30 @@ Phong::Phong(const PropertyList &propList)
 Color3f Phong::brdf(const Vector3f& viewDir, const Vector3f& lightDir, const Normal3f& normal, const Vector2f& uv) const
 {
     /// TODO: implement Phong brdf
+    // cf dessin cours
 
-    throw RTException("Phong::brdf not implemented yet.");
+    //pd = md
+    //ps = ms(cos(alpha)^s) = ms . (max(r.v,0))^s
+    // ms: la couleur spéculaire de l'objet, 
+    // r: vecteur l reflechit à la normale n
+    // r = 2(l.n)*(n-l) 
 
-    return Color3f(0.f);
+    
+    Vector3f r = 2*(normal.dot(lightDir))*normal-lightDir;
+
+    float a = r.dot(viewDir);
+
+    if(a<0){
+      a=0;
+    }
+
+    Color3f ps = m_specularColor*pow((fmax(a,0.f)),m_exponent);
+    Color3f pd = m_diffuseColor;
+    Color3f p = ps + pd;
+
+    //throw RTException("Phong::brdf not implemented yet.");
+
+    return p;
 }
 
 std::string Phong::toString() const {

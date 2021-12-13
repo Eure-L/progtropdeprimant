@@ -1,4 +1,5 @@
 project(mds3d_td1)
+add_compile_options(-w)
 
 cmake_minimum_required(VERSION 2.8.3)
 
@@ -84,6 +85,10 @@ set(SRCS
     src/normals.cpp
     src/direct.cpp
 )
+
+add_compile_options(-w)
+
+add_compile_options(-w)
 
 add_executable(mds3d_raytracer ${SRCS})
 
