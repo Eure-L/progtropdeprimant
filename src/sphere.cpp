@@ -23,6 +23,7 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
     Point3f     c = m_center;
     float       r = m_radius;
     Vector3f    d = ray.direction;
+    Vector3f    normal;
     //Vector3f oc = p - center;
     // t² ||d||² + 2t d.(o-c) + ||o-c||² – r² = 0
 
@@ -45,9 +46,17 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
         float point = -B/(2*A);
         //on verifie que le point est plus près que l'intersection déjà existante
         if(point< hit.t()){
+            normal = Point3f(ray.at(hit.t())-m_center).normalized();
+
             hit.setT(point);
-            hit.setNormal(Point3f(ray.at(hit.t())-m_center).normalized());
+            hit.setNormal(normal);
             hit.setShape(this);
+
+            // Texturing
+            float u =  atan2f(normal.x(), normal.y()) / (2*M_PI);
+            float v =  asin(-normal.z()/r) / M_PI;
+            Vector2f uv(u, v);
+            hit.setUV(uv);
             return true;
         }
         return false;
@@ -59,15 +68,32 @@ bool Sphere::intersect(const Ray& ray, Hit& hit) const
 
         //on verifie que un des points est plus près que l'intersection déjà existante
         if(point1>0){
+            normal = (ray.at(point1)-m_center).normalized();
             hit.setT(point1);
-            hit.setNormal((ray.at(point1)-m_center).normalized());
+            hit.setNormal(normal);
             hit.setShape(this);
+            
+            // Texturing
+            float u =  atan2f(normal.x(), normal.y()) / (2*M_PI);
+            float v =  asin(-normal.z()/r) / M_PI;
+            Vector2f uv(u, v);
+            hit.setUV(uv);
+
             return true;
         }
         else if(point2>0){
+            normal = (ray.at(point2)-m_center).normalized();
+
             hit.setT(point2);
-            hit.setNormal((ray.at(point2)-m_center).normalized());
+            hit.setNormal(normal);
             hit.setShape(this);
+
+            //Texturing
+            float u =  atan2f(normal.x(), normal.y()) / (2*M_PI);
+            float v =  asin(-normal.z()/r) / M_PI;
+            Vector2f uv(u, v);
+            hit.setUV(uv);
+
             return true;
         }
         return false;

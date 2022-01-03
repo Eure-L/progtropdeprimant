@@ -30,7 +30,7 @@ public:
                 float dist;
                 Vector3f lightDir = light->direction(intersection,&dist);
                 
-                // // Ombre
+                // Ombre
                 Hit obstruction;
                 Ray shadowRay = Ray(intersection+hit.normal()*0.0001,lightDir);
                 scene->intersect(shadowRay, obstruction);
@@ -39,7 +39,7 @@ public:
                 if (obstruction.foundIntersection() && obstruction.t() < dist)
                     continue;
 
-                Color3f PHONG = hit.shape()->material()->brdf(-ray.direction,lightDir,hit.normal(),NULL);
+                Color3f PHONG = hit.shape()->material()->brdf(-ray.direction,lightDir,hit.normal(),hit.uv());
                 float cos = fmax(lightDir.dot(hit.normal()), 0.f);
                 colorRet += PHONG*cos*light->intensity(ray.at(hit.t()));
             }

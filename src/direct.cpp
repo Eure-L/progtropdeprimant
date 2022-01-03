@@ -36,7 +36,7 @@ public:
                 if (obstruction.foundIntersection() && obstruction.t() < dist)
                     continue;
 
-                Color3f PHONG = hit.shape()->material()->brdf(-ray.direction,lightDir,hit.normal(),NULL);
+                Color3f PHONG = hit.shape()->material()->brdf(-ray.direction,lightDir,hit.normal(),hit.uv());
                 float cos = fmax(lightDir.dot(hit.normal()), 0.f);
                 colorRet += PHONG*cos*light->intensity(ray.at(hit.t()));
                 

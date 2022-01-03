@@ -38,9 +38,17 @@ bool Plane::intersect(const Ray& ray, Hit& hit) const
     float t = num/d;
 
     if (t > 0 && t < hit.t()) {
+
       hit.setShape(this);
       hit.setT(t);
       hit.setNormal(m_normal);
+
+      // Texturing
+      float u = ray.at(hit.t()).x();
+      float v = ray.at(hit.t()).y();
+      Vector2f uv(u, v);
+      hit.setUV(uv);
+
       return true;
     }
     return false;

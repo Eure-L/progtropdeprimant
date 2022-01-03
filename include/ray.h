@@ -26,8 +26,10 @@ class Hit
 {
 public:
     Hit() : m_shape(nullptr), m_t(std::numeric_limits<float>::max()) {}
-
     bool foundIntersection() const { return m_t < std::numeric_limits<float>::max(); }
+
+    void setUV(const Vector2f& uv) { m_uv = uv; }
+    Vector2f uv() const { return m_uv; }
 
     void setT(float t) { m_t = t; }
     float t() const { return m_t; }
@@ -42,6 +44,7 @@ private:
     Normal3f m_normal;
     const Shape* m_shape;
     float m_t;
+    Vector2f m_uv;
 };
 
 /** Compute the intersection between a ray and an aligned box

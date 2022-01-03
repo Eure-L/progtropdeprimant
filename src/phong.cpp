@@ -41,6 +41,10 @@ Color3f Phong::brdf(const Vector3f& viewDir, const Vector3f& lightDir, const Nor
     Color3f pd = m_diffuseColor;
     Color3f p = ps + pd;
 
+    //seg faults
+    //p = ps + diffuseColor(uv);
+
+
     //throw RTException("Phong::brdf not implemented yet.");
 
     return p;
